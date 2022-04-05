@@ -1,0 +1,36 @@
+table{
+    color:bisque;
+    border: rgb(82, 78, 71);
+    border-radius: 2px;
+    background-color: rgb(139, 134, 134);
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-style: solid;
+    margin-top: 50px;
+    width: 50%;
+    text-align: center;
+    
+}
+
+h2{
+    color: white;
+    margin-top: 50px;
+    text-align: center;
+    
+}
+
+th{
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 15px;
+}
+
+.title{
+    font-size: 25px;
+    background-color: rgb(67, 73, 73);
+}
+
+a{
+    text-align: center;
+}

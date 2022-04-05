@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DataService } from '../service/data.service';
 
 @Component({
   selector: 'app-login',
@@ -11,14 +14,22 @@ export class LoginComponent implements OnInit {
   accno="Account Number Please" // - example for property binding
   acno=""
   pwd=""
-  
-  database:any={
-  1000:{acno:1000,uname:"Neer",password:1000,balance:5000},
-  1001:{acno:1001,uname:"Vyom",password:1001,balance:5000},
-  1002:{acno:1002,uname:"Laisha",password:1002,balance:5000}
-}
 
-  constructor() { }
+
+   //login model creation
+  loginForm=this.fb.group({
+    //creating form array
+    acno:['',[Validators.required,Validators.pattern('[0-9]*')]],
+    pwd:['',[Validators.required,Validators.pattern('[a-zA-Z0-9]*')]]
+  })
+  
+//   database:any={
+//   1000:{acno:1000,uname:"Neer",password:1000,balance:5000},
+//   1001:{acno:1001,uname:"Vyom",password:1001,balance:5000},
+//   1002:{acno:1002,uname:"Laisha",password:1002,balance:5000}
+// }
+
+  constructor(private routerLogin:Router,private ds:DataService,private fb:FormBuilder) { }
 
   ngOnInit(): void {
   }
@@ -58,20 +69,37 @@ export class LoginComponent implements OnInit {
  // user login
   login(){
     // alert("login clicked")
-    var acno=this.acno
-    var pwd=this.pwd
-    let database=this.database
-    if(acno in database){
-      if(pwd==database[acno]["password"]){
-        alert("Login Sucess")
+    var acno =this.loginForm.value.acno
+    var pwd =this.loginForm.value.pwd
+
+    if(this.loginForm.valid){
+     //asynchronous call - login
+      this.ds.login(acno,pwd)
+      .subscribe((result:any)=>{
+      if(result){
+        localStorage.setItem('currentAcno',JSON.stringify(result.currentAcno))
+        localStorage.setItem('currentUname',JSON.stringify(result.currentUname))
+        localStorage.setItem('token',JSON.stringify(result.token))
+        alert(result.message)
+        this.routerLogin.navigateByUrl("home")
+
       }
-      else{
-        alert("Incorrect Password")
+      },
+      (result)=>{
+       alert(result.error.message)
       }
+      
+      )
+    
+    
+      
     }
+    
     else{
-      alert("User does not exist")
+      alert("Invalid Form")
     }
+    
+      
   }
 
 
